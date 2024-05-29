@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { categories } from "../data";
 import "../styles/Listings.scss";
 import ListingCard from "./ListingCard";
@@ -9,12 +9,11 @@ import { setListings } from "../redux/state";
 const Listings = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
-
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const listings = useSelector((state) => state.listings);
 
-  const getFeedListings = async () => {
+  const getFeedListings = useCallback(async () => {
     try {
       const response = await fetch(
         selectedCategory !== "All"
@@ -31,13 +30,13 @@ const Listings = () => {
     } catch (err) {
       console.log("Fetch Listings Failed", err.message);
     }
-  };
+  }, [selectedCategory, dispatch]);
 
   useEffect(() => {
     getFeedListings();
-  }, [selectedCategory]);
+  }, [getFeedListings]);
 
-  console.log(listings)
+  console.log(listings);
 
   return (
     <>
@@ -53,14 +52,39 @@ const Listings = () => {
           </div>
         ))}
       </div>
-     {
-        loading ?<Loader/> :(
-            <div className="listings">
-                {listings.map((listing) => (<ListingCard/>))}
-            </div>
-        )
-     }
-
+      {loading ? (
+        <Loader />
+      ) : (
+        <div className="listings">
+          {listings.map(
+            ({
+              _id,
+              creator,
+              listingPhotoPaths,
+              city,
+              province,
+              country,
+              category,
+              type,
+              price,
+              booking=false
+            }) => (
+              <ListingCard
+                listingId={_id}
+                creator={creator}
+                listingPhotoPaths={listingPhotoPaths}
+                city={city}
+                province={province}
+                country={country}
+                category={category}
+                type={type}
+                price={price}
+                booking={booking}
+              />
+            )
+          )}
+        </div>
+      )}
     </>
   );
 };
