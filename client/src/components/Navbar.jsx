@@ -9,22 +9,38 @@ import { setLogout } from "../redux/state";
 
 
 const Navbar = () => {
-    const [dropdownMenu, setDropdownMenu]= useState(false)
-    const user =useSelector((state) => state.user)
-    const dispatch =useDispatch()
-    return (
-        <div className='navbar'>
-            <a href="/">
-                <img src="/assets/logo.png" alt="logo" />
-            </a>
-            <div className='navbar_search'>
-                <input type="text" placeholder='Search...' />
-                <IconButton>
-                    <Search sx={{ color: variables.pinkred }} />
-                </IconButton>
-            </div>
+  const [dropdownMenu, setDropdownMenu] = useState(false);
 
-            <div className="navbar_right">
+  const user = useSelector((state) => state.user);
+
+  const dispatch = useDispatch();
+
+  const [search, setSearch] = useState("")
+
+  const navigate = useNavigate()
+
+  return (
+    <div className="navbar">
+      <a href="/">
+        <img src="/assets/logo.png" alt="logo" />
+      </a>
+
+      <div className="navbar_search">
+        <input
+          type="text"
+          placeholder="Search ..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+        <IconButton disabled={search === ""}>
+          <Search
+            sx={{ color: variables.pinkred }}
+            onClick={() => {navigate(`/properties/search/${search}`)}}
+          />
+        </IconButton>
+      </div>
+
+      <div className="navbar_right">
         {user ? (
           <a href="/create-listing" className="host">
             Become A Host
@@ -53,6 +69,7 @@ const Navbar = () => {
             />
           )}
         </button>
+
         {dropdownMenu && !user && (
           <div className="navbar_right_accountmenu">
             <Link to="/login">Log In</Link>
@@ -60,14 +77,13 @@ const Navbar = () => {
           </div>
         )}
 
-{dropdownMenu && user && (
+        {dropdownMenu && user && (
           <div className="navbar_right_accountmenu">
-            
-            <Link to="">Trip List</Link>
-            <Link to="">Wish List</Link>
-            <Link to="">Property List</Link>
-            <Link to="">Reservation List</Link>
-            <Link to="">Become A Host</Link>
+            <Link to={`/${user._id}/trips`}>Trip List</Link>
+            <Link to={`/${user._id}/wishList`}>Wish List</Link>
+            <Link to={`/${user._id}/properties`}>Property List</Link>
+            <Link to={`/${user._id}/reservations`}>Reservation List</Link>
+            <Link to="/create-listing">Become A Host</Link>
 
             <Link
               to="/login"
@@ -84,4 +100,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar
+export default Navbar;
