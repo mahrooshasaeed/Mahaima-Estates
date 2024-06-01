@@ -13,6 +13,13 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
+app.use(cors(
+  {
+    origin:["http://deploy-mern-lwhq.vercel.app"],
+    methods:["Post","Get"],
+    credentials:true
+  }
+))
 /* ROUTES */
 app.use("/auth",authRoutes)
 app.use("/properties",listingRoutes)
