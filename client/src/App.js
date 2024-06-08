@@ -11,6 +11,7 @@ import PropertyList from "./Pages/PropertyList"
 import ReservationList from "./Pages/ReservationList"
 import CategoryPage from "./Pages/CategoryPage";
 import SearchPage from "./Pages/SearchPage";
+import Priceprediction from "./Pages/Priceprediction"
 
 
 
@@ -30,6 +31,8 @@ function App() {
        <Route path="/:userId/wishList" element={<WishList/>}/>
        <Route path="/:userId/properties" element={<PropertyList/>}/>
        <Route path="/:userId/reservations" element={<ReservationList/>}/>
+       <Route path="/prediction" element={<Priceprediction/>}/>
+       
 
 
 
